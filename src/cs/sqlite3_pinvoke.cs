@@ -685,7 +685,7 @@ namespace SQLitePCL
         static int collation_hook_bridge_impl(IntPtr p, int len1, IntPtr pv1, int len2, IntPtr pv2)
         {
             collation_hook_info hi = collation_hook_info.from_ptr(p);
-            return hi.call(util.from_utf8(pv1, len1), util.from_utf8(pv2, len2));
+            return hi.call(util.from_utf8_to_span(pv1, len1), util.from_utf8_to_span(pv2, len2));
         }
 
 	NativeMethods.callback_collation collation_hook_bridge = new NativeMethods.callback_collation(collation_hook_bridge_impl); 

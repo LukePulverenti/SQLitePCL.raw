@@ -425,7 +425,7 @@ namespace SQLitePCL
             throw new Exception(GRIPE);
         }
 
-        byte[] ISQLite3Provider.sqlite3_value_blob(IntPtr p)
+        ReadOnlySpan<byte> ISQLite3Provider.sqlite3_value_blob(IntPtr p)
         {
             throw new Exception(GRIPE);
         }

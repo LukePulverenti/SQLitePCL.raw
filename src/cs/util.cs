@@ -184,6 +184,27 @@ namespace SQLitePCL
 
             return result;
         }
+
+        internal static unsafe ReadOnlySpan<char> from_utf8_to_span(IntPtr nativeString, int size)
+        {
+            if (nativeString != IntPtr.Zero)
+            {
+                var encoding = Encoding.UTF8;
+#if NETCOREAPP
+                var buffer = new ReadOnlySpan<byte>(nativeString.ToPointer(), size);
+                var spanBuffer = new char[encoding.GetMaxCharCount(buffer.Length)];
+                var span = new Span<char>(spanBuffer);
+                var length = encoding.GetChars(buffer, span);
+                return span.Slice(0, length);
+#else
+                var array = new byte[size];
+                Marshal.Copy(nativeString, array, 0, size);
+                return encoding.GetString(array, 0, array.Length).AsSpan();
+#endif
+            }
+
+            return null;
+        }
     }
 
     internal class log_hook_info
@@ -518,7 +539,7 @@ namespace SQLitePCL
             return hi;
         }
 
-        internal int call(string s1, string s2)
+        internal int call(ReadOnlySpan<char> s1, ReadOnlySpan<char> s2)
         {
             return _func(_user_data, s1, s2);
         }

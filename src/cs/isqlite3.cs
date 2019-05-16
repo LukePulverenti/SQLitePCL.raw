@@ -35,7 +35,7 @@ namespace SQLitePCL
     public delegate void delegate_profile(object user_data, string statement, long ns);
     public delegate int delegate_progress_handler(object user_data);
     public delegate void delegate_update(object user_data, int type, string database, string table, long rowid);
-    public delegate int delegate_collation(object user_data, string s1, string s2);
+    public delegate int delegate_collation(object user_data, ReadOnlySpan<char> s1, ReadOnlySpan<char> s2);
     public delegate int delegate_exec(object user_data, string[] values, string[] names);
 
     public delegate void delegate_function_scalar(sqlite3_context ctx, object user_data, sqlite3_value[] args);
@@ -201,7 +201,7 @@ namespace SQLitePCL
         void sqlite3_result_error_nomem(IntPtr context);
         void sqlite3_result_error_code(IntPtr context, int code);
 
-        byte[] sqlite3_value_blob(IntPtr p);
+        ReadOnlySpan<byte> sqlite3_value_blob(IntPtr p);
         int sqlite3_value_bytes(IntPtr p);
         double sqlite3_value_double(IntPtr p);
         int sqlite3_value_int(IntPtr p);
